@@ -1,0 +1,1 @@
+../../Classes/Plugins/SDKInfo/SFSDKInfoPlugin.h

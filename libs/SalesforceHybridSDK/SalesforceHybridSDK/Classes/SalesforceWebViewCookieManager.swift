@@ -30,6 +30,10 @@
 import Foundation
 import WebKit
 import SalesforceSDKCore
+#if SWIFT_PACKAGE
+import SalesforceHybridSDK
+import SalesforceSDKCoreSwift
+#endif
 
 @objc(SFSDKSalesforceWebViewCookieManager)
 public class SalesforceWebViewCookieManager: NSObject {

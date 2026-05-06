@@ -1,0 +1,1 @@
+../../Classes/Plugins/SFSmartStore/SFSmartStorePlugin.h

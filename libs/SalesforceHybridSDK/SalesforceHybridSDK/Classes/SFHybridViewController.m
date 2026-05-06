@@ -40,8 +40,13 @@
 #import <SalesforceSDKCore/SFRestAPI+Blocks.h>
 #import <Cordova/NSDictionary+CordovaPreferences.h>
 #import <objc/message.h>
+#ifdef SWIFT_PACKAGE
+@import SalesforceSDKCoreSwift;
+#import <SalesforceHybridSDK/SalesforceHybridSDK-Swift.h>
+#else
 #import <SalesforceSDKCore/SalesforceSDKCore-Swift.h>
 #import <SalesforceHybridSDK/SalesforceHybridSDK-Swift.h>
+#endif
 
 // Public constants.
 NSString * const kAppHomeUrlPropKey = @"AppHomeUrl";

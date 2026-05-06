@@ -1,0 +1,33 @@
+{
+  "originHash" : "b69bc6a3e30a930f0b447d7eca15d7e8d8db1aae39672c63cd8db5cc159ebdba",
+  "pins" : [
+    {
+      "identity" : "fmdb",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/forcedotcom/fmdb.git",
+      "state" : {
+        "revision" : "192f63fad2b22f55893609829c828e9b9e06c20c",
+        "version" : "2.7.12-sqlcipher"
+      }
+    },
+    {
+      "identity" : "sqlcipher.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/sqlcipher/SQLCipher.swift.git",
+      "state" : {
+        "revision" : "967b937db0b24508d5674c46ddd4d064a888a304",
+        "version" : "4.15.0"
+      }
+    },
+    {
+      "identity" : "swift-log",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-log",
+      "state" : {
+        "revision" : "5073617dac96330a486245e4c0179cb0a6fd2256",
+        "version" : "1.12.0"
+      }
+    }
+  ],
+  "version" : 3
+}

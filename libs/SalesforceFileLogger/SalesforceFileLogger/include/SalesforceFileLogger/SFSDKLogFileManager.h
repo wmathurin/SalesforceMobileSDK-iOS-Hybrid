@@ -1,0 +1,1 @@
+../../Classes/Logger/SFSDKLogFileManager.h

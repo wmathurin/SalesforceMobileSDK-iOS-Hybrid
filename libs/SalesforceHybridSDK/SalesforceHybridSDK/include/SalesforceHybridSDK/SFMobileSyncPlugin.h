@@ -1,0 +1,1 @@
+../../Classes/Plugins/SFMobileSyncPlugin/SFMobileSyncPlugin.h

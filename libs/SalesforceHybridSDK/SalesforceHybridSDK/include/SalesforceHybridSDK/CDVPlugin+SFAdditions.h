@@ -1,0 +1,1 @@
+../../Classes/Plugins/SFAdditions/CDVPlugin+SFAdditions.h
