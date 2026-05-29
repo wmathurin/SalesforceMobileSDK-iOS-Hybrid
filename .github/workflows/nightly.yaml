@@ -2,9 +2,12 @@ name: Nightly Tests
 
 on:
   schedule:
-    - cron: "0 5 * * 4"  # cron is UTC, this translates to 10 PM PST Wednesday.
+    - cron: "30 5 * * 3,5"  # cron is UTC; 9:30 PM PT Tue/Thu.
   # This lets us trigger the workflow from a browser.
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   ios-nightly:
@@ -23,7 +26,12 @@ jobs:
       lib: ${{ matrix.lib }}
       ios: ${{ matrix.ios }}
       xcode: ${{ matrix.xcode }}
-    secrets: inherit
+    permissions:
+      contents: read
+      pull-requests: write
+    secrets:
+      TEST_CREDENTIALS: ${{ secrets.TEST_CREDENTIALS }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   hybrid-samples-nightly:
     strategy:
@@ -41,4 +49,5 @@ jobs:
       app: ${{ matrix.app }}
       ios: ${{ matrix.ios }}
       xcode: ${{ matrix.xcode }}
-    secrets: inherit
+    permissions:
+      contents: read
