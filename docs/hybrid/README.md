@@ -113,3 +113,25 @@ xcodebuild test \
 ```
 
 Always open `SalesforceMobileSDK-Hybrid.xcworkspace` (not individual `.xcodeproj` files) to ensure CocoaPods dependencies resolve correctly.
+
+Most tests require a `test_credentials.json` file at `shared/test/test_credentials.json`. Without it, only tests that do not make authenticated Salesforce API calls will pass. Copy the sample and fill in your org details:
+
+```bash
+cp shared/test/test_credentials.json.sample shared/test/test_credentials.json
+# then edit with your Connected App credentials and org details
+```
+
+The file must contain:
+
+```json
+{
+  "test_client_id":    "<Connected App consumer key>",
+  "test_login_domain": "<login URL, e.g. test.salesforce.com>",
+  "test_redirect_uri": "<Connected App callback URL>",
+  "refresh_token":     "<valid refresh token>",
+  "instance_url":      "<org instance URL>",
+  "identity_url":      "<identity URL>"
+}
+```
+
+`test_credentials.json` is gitignored — never commit real credentials.
