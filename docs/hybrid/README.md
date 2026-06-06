@@ -84,6 +84,18 @@ Their JavaScript source comes from the `external/shared/` submodule.
 
 ---
 
+## Version Management
+
+`setversion.sh` updates the SDK version in both podspecs:
+
+```bash
+./setversion.sh -v 14.0.0
+```
+
+This updates `s.version` in `SalesforceHybridSDK.podspec` and `SalesforceFileLogger.podspec`. This script has no `-d` flag — the dev/GA distinction for iOS is controlled by CordovaPlugin's `plugin.xml` (which references the pod by `branch="dev"` or `tag="v14.0.0"` depending on the build type).
+
+---
+
 ## Running Unit Tests
 
 Open the workspace and run the `SalesforceHybridSDK` scheme tests:
