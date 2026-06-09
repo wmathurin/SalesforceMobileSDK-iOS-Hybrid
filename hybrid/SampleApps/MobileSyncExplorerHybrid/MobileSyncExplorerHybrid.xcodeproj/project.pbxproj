@@ -19,7 +19,7 @@
 		4F6D68B3228E2ECF008C8A96 /* SalesforceHybridSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 829DA28C1C1264E40040F5F1 /* SalesforceHybridSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F6D68B6228E2ECF008C8A96 /* Cordova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEF96DC1EB7CF050059CA79 /* Cordova.framework */; };
 		4F6D68B7228E2ECF008C8A96 /* Cordova.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CEEF96DC1EB7CF050059CA79 /* Cordova.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4F6D839B19525B66003EBB16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6D839819525B66003EBB16 /* AppDelegate.m */; };
+		4F6D839B19525B66003EBB16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6D839819525B66003EBB16 /* AppDelegate.swift */; };
 		4FC276B019DCBC6E008F4AA6 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 824A9DC01724CE4600C9BD79 /* config.xml */; };
 		4FC276B119DCBC6E008F4AA6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 824A9BDA1721FCA400C9BD79 /* InfoPlist.strings */; };
 		4FC276B219DCBC80008F4AA6 /* bootconfig.json in Copy Shared www Files */ = {isa = PBXBuildFile; fileRef = 4FC2768719DCBAD5008F4AA6 /* bootconfig.json */; };
@@ -55,7 +55,6 @@
 		824A9BD21721FCA400C9BD79 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9BD11721FCA400C9BD79 /* UIKit.framework */; };
 		824A9BD41721FCA400C9BD79 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9BD31721FCA400C9BD79 /* Foundation.framework */; };
 		824A9BD61721FCA400C9BD79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9BD51721FCA400C9BD79 /* CoreGraphics.framework */; };
-		824A9BDE1721FCA400C9BD79 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 824A9BDD1721FCA400C9BD79 /* main.m */; };
 		824A9DA91724C99800C9BD79 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9DA81724C99800C9BD79 /* AudioToolbox.framework */; };
 		824A9DAB1724C9C900C9BD79 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9DAA1724C9C900C9BD79 /* AVFoundation.framework */; };
 		824A9DAD1724C9D100C9BD79 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9DAC1724C9D100C9BD79 /* CFNetwork.framework */; };
@@ -89,8 +88,7 @@
 		CE7BA1ED1D8CB355000B91D7 /* com.salesforce.plugin.network.js in Copy plugins Files */ = {isa = PBXBuildFile; fileRef = CE7BA1931D8CA3D5000B91D7 /* com.salesforce.plugin.network.js */; };
 		CE7BA1EE1D8CB355000B91D7 /* com.salesforce.util.push.js in Copy plugins Files */ = {isa = PBXBuildFile; fileRef = CE7BA1941D8CA3D5000B91D7 /* com.salesforce.util.push.js */; };
 		CEBDA0391D3C04A500DBDBD0 /* CDVAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBDA0381D3C04A500DBDBD0 /* CDVAppDelegate.m */; };
-		CEBDA0BC1D3C05F500DBDBD0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBDA0BA1D3C05F500DBDBD0 /* MainViewController.m */; };
-		CEBDA0BD1D3C05F500DBDBD0 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEBDA0BB1D3C05F500DBDBD0 /* MainViewController.xib */; };
+		B2C3D4E5F6A7B8C9D0E1F2A4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F2A3 /* ViewController.swift */; };
 		CED747441E8C86C60019AA9D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED747431E8C86C60019AA9D /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -394,8 +392,8 @@
 		4F5B96111DA8693E001627F2 /* force.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = force.js; sourceTree = "<group>"; };
 		4F5B96BE1DAD9ED8001627F2 /* com.salesforce.plugin.smartstore.client.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = com.salesforce.plugin.smartstore.client.js; sourceTree = "<group>"; };
 		4F5B96BF1DAD9ED8001627F2 /* com.salesforce.util.promiser.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = com.salesforce.util.promiser.js; sourceTree = "<group>"; };
-		4F6D839819525B66003EBB16 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ../../../../shared/hybrid/AppDelegate.m; sourceTree = "<group>"; };
-		4F6D839919525B66003EBB16 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/AppDelegate.h; sourceTree = "<group>"; };
+		4F6D839819525B66003EBB16 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../../../../shared/hybrid/AppDelegate.swift; sourceTree = "<group>"; };
+		4F6D839919525B66003EBB16 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../../../../external/cordova/templates/project/App/AppDelegate.h; sourceTree = "<group>"; };
 		4FC2768519DCBAA3008F4AA6 /* com.salesforce.plugin.mobilesync.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = com.salesforce.plugin.mobilesync.js; sourceTree = "<group>"; };
 		4FC2768719DCBAD5008F4AA6 /* bootconfig.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = bootconfig.json; path = ../../../../external/shared/samples/mobilesyncexplorer/bootconfig.json; sourceTree = "<group>"; };
 		4FC2768819DCBAD5008F4AA6 /* MobileSyncExplorer.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = MobileSyncExplorer.html; path = ../../../../external/shared/samples/mobilesyncexplorer/MobileSyncExplorer.html; sourceTree = "<group>"; };
@@ -430,7 +428,6 @@
 		824A9BD51721FCA400C9BD79 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		824A9BD91721FCA400C9BD79 /* MobileSyncExplorerHybrid-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MobileSyncExplorerHybrid-Info.plist"; sourceTree = "<group>"; };
 		824A9BDB1721FCA400C9BD79 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		824A9BDD1721FCA400C9BD79 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/main.m; sourceTree = "<group>"; };
 		824A9BDF1721FCA400C9BD79 /* MobileSyncExplorerHybrid-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MobileSyncExplorerHybrid-Prefix.pch"; sourceTree = "<group>"; };
 		824A9BF91721FE1100C9BD79 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
 		824A9DA41724C98900C9BD79 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -476,9 +473,8 @@
 		CE7BA1941D8CA3D5000B91D7 /* com.salesforce.util.push.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = com.salesforce.util.push.js; sourceTree = "<group>"; };
 		CEBDA0371D3C04A500DBDBD0 /* CDVAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVAppDelegate.h; path = ../../../../external/cordova/CordovaLib/include/Cordova/CDVAppDelegate.h; sourceTree = "<group>"; };
 		CEBDA0381D3C04A500DBDBD0 /* CDVAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVAppDelegate.m; path = ../../../../external/cordova/CordovaLib/Classes/Public/CDVAppDelegate.m; sourceTree = "<group>"; };
-		CEBDA0B91D3C05F500DBDBD0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/MainViewController.h; sourceTree = "<group>"; };
-		CEBDA0BA1D3C05F500DBDBD0 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/MainViewController.m; sourceTree = "<group>"; };
-		CEBDA0BB1D3C05F500DBDBD0 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainViewController.xib; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/MainViewController.xib; sourceTree = "<group>"; };
+		B2C3D4E5F6A7B8C9D0E1F2A3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../../../external/cordova/templates/project/App/ViewController.swift; sourceTree = "<group>"; };
+		CEBDA0B91D3C05F500DBDBD0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = ../../../../external/cordova/templates/project/App/MainViewController.h; sourceTree = "<group>"; };
 		CED747431E8C86C60019AA9D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		CEEF96D41EB7CF050059CA79 /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = ../../../external/cordova/CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -660,7 +656,6 @@
 				824A9DC01724CE4600C9BD79 /* config.xml */,
 				824A9BD91721FCA400C9BD79 /* MobileSyncExplorerHybrid-Info.plist */,
 				824A9BDA1721FCA400C9BD79 /* InfoPlist.strings */,
-				824A9BDD1721FCA400C9BD79 /* main.m */,
 				824A9BDF1721FCA400C9BD79 /* MobileSyncExplorerHybrid-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -696,11 +691,10 @@
 			children = (
 				B7BAD78B1FBB7EE40046629F /* IDPLoginViewController.xib */,
 				CEBDA0B91D3C05F500DBDBD0 /* MainViewController.h */,
-				CEBDA0BA1D3C05F500DBDBD0 /* MainViewController.m */,
-				CEBDA0BB1D3C05F500DBDBD0 /* MainViewController.xib */,
+				B2C3D4E5F6A7B8C9D0E1F2A3 /* ViewController.swift */,
 				CEBDA0371D3C04A500DBDBD0 /* CDVAppDelegate.h */,
 				CEBDA0381D3C04A500DBDBD0 /* CDVAppDelegate.m */,
-				4F6D839819525B66003EBB16 /* AppDelegate.m */,
+				4F6D839819525B66003EBB16 /* AppDelegate.swift */,
 				4F6D839919525B66003EBB16 /* AppDelegate.h */,
 				8272301A19D764160066A350 /* InitialViewController.h */,
 				8272301B19D764160066A350 /* InitialViewController.m */,
@@ -1080,7 +1074,6 @@
 				4FC276B119DCBC6E008F4AA6 /* InfoPlist.strings in Resources */,
 				B7168FB81FACC31100A48DB5 /* LaunchScreen.storyboard in Resources */,
 				B7BAD78E1FBB7EE50046629F /* IDPLoginViewController.xib in Resources */,
-				CEBDA0BD1D3C05F500DBDBD0 /* MainViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1093,11 +1086,10 @@
 			files = (
 				8272301C19D764160066A350 /* InitialViewController.m in Sources */,
 				82AF5AE61A0DADA4006C7A4B /* CDVLogger.m in Sources */,
-				CEBDA0BC1D3C05F500DBDBD0 /* MainViewController.m in Sources */,
+				B2C3D4E5F6A7B8C9D0E1F2A4 /* ViewController.swift in Sources */,
 				CEBDA0391D3C04A500DBDBD0 /* CDVAppDelegate.m in Sources */,
-				824A9BDE1721FCA400C9BD79 /* main.m in Sources */,
 				82638F0C19B8E1FD00FBB3C9 /* UIApplication+SalesforceHybridSDK.m in Sources */,
-				4F6D839B19525B66003EBB16 /* AppDelegate.m in Sources */,
+				4F6D839B19525B66003EBB16 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1207,6 +1199,8 @@
 					"$(PROJECT_DIR)/../../../external/cordova/CordovaLib/Classes/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SWIFT_VERSION = 5.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/../../../shared/hybrid/SampleApp-Bridging-Header.h";
 				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
@@ -1261,6 +1255,8 @@
 					"$(PROJECT_DIR)/../../../external/cordova/CordovaLib/Classes/**",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SWIFT_VERSION = 5.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/../../../shared/hybrid/SampleApp-Bridging-Header.h";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";

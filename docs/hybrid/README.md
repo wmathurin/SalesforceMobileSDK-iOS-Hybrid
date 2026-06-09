@@ -47,15 +47,22 @@ The `shared/hybrid/` directory contains Objective-C files that `tools/update.sh`
 
 | File | Role |
 |------|------|
-| `AppDelegate.m` | Application entry point that bootstraps the Salesforce hybrid runtime (OAuth, SDK initialization, view controller setup) |
+| `AppDelegate.swift` | Application entry point — bootstraps the Salesforce hybrid runtime (SDK init, OAuth, URL cache, view controller setup). Uses `@main @_objcImplementation extension AppDelegate` pattern required by cordova-ios 8.x. |
 | `InitialViewController.h` / `.m` | Root view controller displayed before the Cordova WKWebView loads |
 | `UIApplication+SalesforceHybridSDK.h` / `.m` | UIApplication category that tracks last-event timing for passcode inactivity |
 
-The directory also contains `config.xml` and `cordova_plugins.js`, but only the Objective-C files are copied to the CordovaPlugin.
+The directory also contains `config.xml` and `cordova_plugins.js`, but only the Swift/ObjC source files are copied to the CordovaPlugin.
 
-### Why `AppDelegate.m` lives here
+### Why `AppDelegate.swift` lives here and how it reaches the generated app
 
-When `cordova platform add ios` runs, Cordova generates its own `AppDelegate.m`. The CordovaPlugin's `postinstall-ios.js` hook patches `project.pbxproj` to redirect the AppDelegate reference to `Plugins/com.salesforce/AppDelegate.m` — the SDK version that initializes the Salesforce hybrid runtime (OAuth, SDK manager, hybrid view controller). Without this patch, none of the Salesforce Cordova plugins would function.
+When `cordova platform add ios` runs, Cordova generates its own `AppDelegate.swift`. The CordovaPlugin's `postinstall-ios.js` hook:
+1. Copies our `AppDelegate.swift` from the plugin into `platforms/ios/App/Plugins/com.salesforce/`
+2. Patches `project.pbxproj` to redirect the app target's `AppDelegate.swift` reference to `Plugins/com.salesforce/AppDelegate.swift`
+3. Adds `#import "InitialViewController.h"` to the Bridging-Header so the ObjC class is accessible from Swift
+
+Without this, Cordova's bare `AppDelegate.swift` would be used and the Salesforce SDK would never initialize.
+
+**Note:** `AppDelegate.swift` is intentionally **not** declared as a `<source-file>` in `plugin.xml`. In cordova-ios 8.x, `<source-file>` entries go into the `CordovaPlugins` SPM target, which cannot link CocoaPods frameworks like `SalesforceHybridSDK`. The copy + redirect approach is the correct workaround.
 
 ---
 
@@ -77,10 +84,38 @@ Other submodules:
 
 Located under `hybrid/SampleApps/`:
 
-- **AccountEditor** — Basic CRUD operations on Account records using Cordova plugins
-- **MobileSyncExplorerHybrid** — Full MobileSync demo with offline sync and conflict resolution
+- **AccountEditor** — Basic CRUD operations on Account records using Cordova plugins and `force.js`
+- **MobileSyncExplorerHybrid** — Full offline sync demo using SmartStore and MobileSync
 
-Their JavaScript source comes from the `external/shared/` submodule.
+### How sample apps are structured
+
+The sample apps are standard Xcode projects that wire together files from four sources via relative paths in `project.pbxproj`:
+
+| Source | What it provides |
+|--------|-----------------|
+| `external/shared/samples/<appname>/` | App HTML, CSS, JS, `bootconfig.json`, sync configs (from Shared submodule) |
+| `external/shared/gen/plugins_with_define/` | Cordova plugin JS files copied to `www/plugins/com.salesforce/` (from Shared submodule) |
+| `shared/hybrid/` | `AppDelegate.swift`, `InitialViewController.{h,m}`, `UIApplication+SalesforceHybridSDK.{h,m}`, `config.xml`, `cordova_plugins.js` |
+| `external/cordova/` | `cordova.js`, `CDVAppDelegate.{h,m}`, `CordovaLib.xcodeproj` (from cordova submodule) |
+| `external/SalesforceMobileSDK-iOS/` | SDK library `.xcodeproj` files and shared resources (from iOS SDK submodule) |
+
+None of the app-specific source files live in the `hybrid/SampleApps/` directory itself — the Xcode projects are essentially just wiring. All content is pulled from submodules and `shared/hybrid/`.
+
+### Building the sample apps
+
+Prerequisites: run `./install.sh` from the repo root to populate all external submodules.
+
+```bash
+# Open the workspace (not individual .xcodeproj files)
+open SalesforceMobileSDK-Hybrid.xcworkspace
+```
+
+Select the `AccountEditor` or `MobileSyncExplorerHybrid` scheme and build. Before running:
+- Fill in your Connected App credentials in `external/shared/samples/<appname>/bootconfig.json`
+
+### Cordova version dependency
+
+The sample apps link directly against `external/cordova/CordovaLib/CordovaLib.xcodeproj` (the cordova submodule, currently cordova-ios 7.1.1). When the cordova-ios version is upgraded, the `external/cordova` submodule must be updated to the new version. This also requires updating the sample app Xcode projects to reflect any project structure changes in the new Cordova template (e.g., the cordova-ios 8.x move from `main.m` + ObjC `AppDelegate.m` to a Swift `AppDelegate.swift` with `@main`).
 
 ---
 
