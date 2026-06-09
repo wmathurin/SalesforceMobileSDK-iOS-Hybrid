@@ -39,6 +39,7 @@
 #import <SalesforceSDKCore/NSString+SFAdditions.h>
 #import <SalesforceSDKCore/SFRestAPI+Blocks.h>
 #import <Cordova/NSDictionary+CordovaPreferences.h>
+#import <Cordova/CDVPluginNotifications.h>
 #import <objc/message.h>
 #import <SalesforceSDKCore/SalesforceSDKCore-Swift.h>
 #import <SalesforceHybridSDK/SalesforceHybridSDK-Swift.h>
