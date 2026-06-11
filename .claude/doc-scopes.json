@@ -12,7 +12,7 @@
     },
     {
       "doc": "docs/hybrid/README.md",
-      "scope": "docs/hybrid",
+      "scope": "libs/SalesforceHybridSDK",
       "description": "iOS Hybrid SDK — Contributor Guide"
     },
     {
