@@ -1,0 +1,29 @@
+{
+  "docs": [
+    {
+      "doc": "README.md",
+      "scope": ".",
+      "description": "Salesforce Mobile SDK for iOS Hybrid"
+    },
+    {
+      "doc": "CLAUDE.md",
+      "scope": ".",
+      "description": "CLAUDE.md — Salesforce Mobile SDK for iOS Hybrid"
+    },
+    {
+      "doc": "docs/hybrid/README.md",
+      "scope": "docs/hybrid",
+      "description": "iOS Hybrid SDK — Contributor Guide"
+    },
+    {
+      "doc": "hybrid/SampleApps/MobileSyncExplorerHybrid/MobileSyncExplorerHybrid/readme.md",
+      "scope": "hybrid/SampleApps/MobileSyncExplorerHybrid",
+      "description": "About this REST + PhoneGap sample app"
+    },
+    {
+      "doc": "hybrid/SampleApps/AccountEditor/AccountEditor/readme.md",
+      "scope": "hybrid/SampleApps/AccountEditor",
+      "description": "About this REST + PhoneGap sample app"
+    }
+  ]
+}
