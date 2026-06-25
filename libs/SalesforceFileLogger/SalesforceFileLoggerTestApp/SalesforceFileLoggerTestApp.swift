@@ -26,9 +26,30 @@
 //  WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import SwiftUI
+import SalesforceFileLogger
+
+private class LogTag: NSObject {}
 
 @main
 struct SalesforceFileLoggerTestApp: App {
+
+    init() {
+        // Log some messages using SFSDKLogger without enabling OSLog
+        SFSDKLogger.sharedInstance().i(LogTag.self, message: "Info log message without OSLog")
+        SFSDKLogger.sharedInstance().w(LogTag.self, message: "Warning log message without OSLog")
+        SFSDKLogger.sharedInstance().e(LogTag.self, message: "Error log message without OSLog")
+        SFSDKLogger.sharedInstance().d(LogTag.self, message: "Debug log message without OSLog")
+
+        SFSDKLogger.useOSLog = true
+
+        // Create a new logger instance with OSLog enabled and log some more messages
+        let osLogTestLogger = SFSDKLogger.sharedInstance(withComponent: "OSLog Test")
+        osLogTestLogger.i(LogTag.self, message: "Info log message with OSLog")
+        osLogTestLogger.w(LogTag.self, message: "Warning log message with OSLog")
+        osLogTestLogger.e(LogTag.self, message: "Error log message with OSLog")
+        osLogTestLogger.d(LogTag.self, message: "Debug log message with OSLog")
+    }
+
     var body: some Scene {
         WindowGroup {
             Text("SalesforceFileLogger Test App")
