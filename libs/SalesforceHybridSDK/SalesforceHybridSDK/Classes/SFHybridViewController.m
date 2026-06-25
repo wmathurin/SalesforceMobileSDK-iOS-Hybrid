@@ -379,13 +379,9 @@ static NSString * const kHTTP = @"http";
 - (NSString *)sfHybridViewUserAgentString
 {
     NSString *userAgentString = @"";
-    if ([SalesforceSDKManager sharedManager].userAgentString != NULL) {
-        if (_hybridViewConfig.isLocal) {
-            userAgentString = [SalesforceSDKManager sharedManager].userAgentString(@"Local");
-        } else {
-            userAgentString = [SalesforceSDKManager sharedManager].userAgentString(@"Remote");
-        }
-    }
+    SFUserAccount *currentUser = [SFUserAccountManager sharedInstance].currentUser;
+    NSString *qualifier = _hybridViewConfig.isLocal ? @"Local" : @"Remote";
+    userAgentString = [[SalesforceSDKManager sharedManager] userAgentString:qualifier forUser:currentUser];
     return userAgentString;
 }
 
