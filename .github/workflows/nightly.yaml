@@ -21,11 +21,13 @@ jobs:
             xcode: ^26
           - ios: ^18
             xcode: ^16
+            macos: macos-15
     uses: ./.github/workflows/reusable-test-workflow.yaml
     with:
       lib: ${{ matrix.lib }}
       ios: ${{ matrix.ios }}
       xcode: ${{ matrix.xcode }}
+      macos: ${{ matrix.macos }}
     permissions:
       contents: read
       pull-requests: write
@@ -44,10 +46,12 @@ jobs:
             xcode: ^26
           - ios: ^18
             xcode: ^16
+            macos: macos-15
     uses: ./.github/workflows/reusable-build-workflow.yaml
     with:
       app: ${{ matrix.app }}
       ios: ${{ matrix.ios }}
       xcode: ${{ matrix.xcode }}
+      macos: ${{ matrix.macos }}
     permissions:
       contents: read
