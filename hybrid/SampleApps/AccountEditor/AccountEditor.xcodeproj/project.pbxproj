@@ -19,7 +19,7 @@
 		4F6D68EC228E3129008C8A96 /* SalesforceHybridSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFEE5FE1BFE912300B7AA8A /* SalesforceHybridSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F6D68F0228E3129008C8A96 /* Cordova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEEF967C1EB7CE5A0059CA79 /* Cordova.framework */; };
 		4F6D68F1228E3129008C8A96 /* Cordova.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CEEF967C1EB7CE5A0059CA79 /* Cordova.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		4F6D839B19525B66003EBB16 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F6D839819525B66003EBB16 /* AppDelegate.m */; };
+		4F6D839B19525B66003EBB16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6D839819525B66003EBB16 /* AppDelegate.swift */; };
 		4FD3FC441DB05B2600646D6D /* force+promise.js in Copy js Files */ = {isa = PBXBuildFile; fileRef = 4FD3FC1F1DB05B1E00646D6D /* force+promise.js */; };
 		4FF15E871908856800705FE0 /* AccountEditor.html in Copy Shared www Files */ = {isa = PBXBuildFile; fileRef = 4FF15E2A190884FE00705FE0 /* AccountEditor.html */; };
 		4FF15E881908856800705FE0 /* bootconfig.json in Copy Shared www Files */ = {isa = PBXBuildFile; fileRef = 4FF15E2B190884FE00705FE0 /* bootconfig.json */; };
@@ -50,7 +50,6 @@
 		824A9BD41721FCA400C9BD79 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9BD31721FCA400C9BD79 /* Foundation.framework */; };
 		824A9BD61721FCA400C9BD79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9BD51721FCA400C9BD79 /* CoreGraphics.framework */; };
 		824A9BDC1721FCA400C9BD79 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 824A9BDA1721FCA400C9BD79 /* InfoPlist.strings */; };
-		824A9BDE1721FCA400C9BD79 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 824A9BDD1721FCA400C9BD79 /* main.m */; };
 		824A9DA91724C99800C9BD79 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9DA81724C99800C9BD79 /* AudioToolbox.framework */; };
 		824A9DAB1724C9C900C9BD79 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9DAA1724C9C900C9BD79 /* AVFoundation.framework */; };
 		824A9DAD1724C9D100C9BD79 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824A9DAC1724C9D100C9BD79 /* CFNetwork.framework */; };
@@ -87,8 +86,7 @@
 		CE7BA1E91D8CB330000B91D7 /* com.salesforce.plugin.mobilesync.js in Copy plugins Files */ = {isa = PBXBuildFile; fileRef = CE7BA1BB1D8CA3DF000B91D7 /* com.salesforce.plugin.mobilesync.js */; };
 		CE7BA1EA1D8CB330000B91D7 /* com.salesforce.util.push.js in Copy plugins Files */ = {isa = PBXBuildFile; fileRef = CE7BA1BC1D8CA3DF000B91D7 /* com.salesforce.util.push.js */; };
 		CEBDA0891D3C052600DBDBD0 /* CDVAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBDA0881D3C052600DBDBD0 /* CDVAppDelegate.m */; };
-		CEBDA0B21D3C059900DBDBD0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBDA0B01D3C059900DBDBD0 /* MainViewController.m */; };
-		CEBDA0B31D3C059900DBDBD0 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CEBDA0B11D3C059900DBDBD0 /* MainViewController.xib */; };
+		A1B2C3D4E5F6A7B8C9D0E1F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F2 /* ViewController.swift */; };
 		CED747481E8C86EB0019AA9D /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED747471E8C86EB0019AA9D /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -390,8 +388,8 @@
 		4F5B96151DA8695E001627F2 /* force.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = force.js; sourceTree = "<group>"; };
 		4F5B966C1DAD9E90001627F2 /* com.salesforce.plugin.smartstore.client.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = com.salesforce.plugin.smartstore.client.js; sourceTree = "<group>"; };
 		4F5B966D1DAD9E90001627F2 /* com.salesforce.util.promiser.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = com.salesforce.util.promiser.js; sourceTree = "<group>"; };
-		4F6D839819525B66003EBB16 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ../../../../shared/hybrid/AppDelegate.m; sourceTree = "<group>"; };
-		4F6D839919525B66003EBB16 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/AppDelegate.h; sourceTree = "<group>"; };
+		4F6D839819525B66003EBB16 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = ../../../../shared/hybrid/AppDelegate.swift; sourceTree = "<group>"; };
+		4F6D839919525B66003EBB16 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../../../../external/cordova/templates/project/App/AppDelegate.h; sourceTree = "<group>"; };
 		4FD3FC1F1DB05B1E00646D6D /* force+promise.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "force+promise.js"; path = "../../../libs/force+promise.js"; sourceTree = "<group>"; };
 		4FF15E25190884C600705FE0 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		4FF15E2A190884FE00705FE0 /* AccountEditor.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = AccountEditor.html; path = ../../../../external/shared/samples/accounteditor/AccountEditor.html; sourceTree = "<group>"; };
@@ -423,7 +421,6 @@
 		824A9BD51721FCA400C9BD79 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		824A9BD91721FCA400C9BD79 /* AccountEditor-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AccountEditor-Info.plist"; sourceTree = "<group>"; };
 		824A9BDB1721FCA400C9BD79 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		824A9BDD1721FCA400C9BD79 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/main.m; sourceTree = "<group>"; };
 		824A9BDF1721FCA400C9BD79 /* AccountEditor-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AccountEditor-Prefix.pch"; sourceTree = "<group>"; };
 		824A9BF91721FE1100C9BD79 /* readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.md; sourceTree = "<group>"; };
 		824A9DA41724C98900C9BD79 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
@@ -470,9 +467,8 @@
 		CE7BA1BC1D8CA3DF000B91D7 /* com.salesforce.util.push.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = com.salesforce.util.push.js; sourceTree = "<group>"; };
 		CEBDA0871D3C052600DBDBD0 /* CDVAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CDVAppDelegate.h; path = ../../../../external/cordova/CordovaLib/include/Cordova/CDVAppDelegate.h; sourceTree = "<group>"; };
 		CEBDA0881D3C052600DBDBD0 /* CDVAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVAppDelegate.m; path = ../../../../external/cordova/CordovaLib/Classes/Public/CDVAppDelegate.m; sourceTree = "<group>"; };
-		CEBDA0AF1D3C059900DBDBD0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/MainViewController.h; sourceTree = "<group>"; };
-		CEBDA0B01D3C059900DBDBD0 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainViewController.m; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/MainViewController.m; sourceTree = "<group>"; };
-		CEBDA0B11D3C059900DBDBD0 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainViewController.xib; path = ../../../../external/cordova/templates/project/__PROJECT_NAME__/MainViewController.xib; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ViewController.swift; path = ../../../../external/cordova/templates/project/App/ViewController.swift; sourceTree = "<group>"; };
+		CEBDA0AF1D3C059900DBDBD0 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainViewController.h; path = ../../../../external/cordova/templates/project/App/MainViewController.h; sourceTree = "<group>"; };
 		CED747471E8C86EB0019AA9D /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		CEEF96741EB7CE5A0059CA79 /* CordovaLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CordovaLib.xcodeproj; path = ../../../external/cordova/CordovaLib/CordovaLib.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -663,7 +659,6 @@
 				824A9DC01724CE4600C9BD79 /* config.xml */,
 				824A9BD91721FCA400C9BD79 /* AccountEditor-Info.plist */,
 				824A9BDA1721FCA400C9BD79 /* InfoPlist.strings */,
-				824A9BDD1721FCA400C9BD79 /* main.m */,
 				824A9BDF1721FCA400C9BD79 /* AccountEditor-Prefix.pch */,
 				69B48BEE2AD4DE1C0026AEC6 /* PrivacyInfo.xcprivacy */,
 			);
@@ -698,11 +693,10 @@
 			children = (
 				B7BAD75F1FBB7DEE0046629F /* IDPLoginViewController.xib */,
 				CEBDA0AF1D3C059900DBDBD0 /* MainViewController.h */,
-				CEBDA0B01D3C059900DBDBD0 /* MainViewController.m */,
-				CEBDA0B11D3C059900DBDBD0 /* MainViewController.xib */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* ViewController.swift */,
 				CEBDA0871D3C052600DBDBD0 /* CDVAppDelegate.h */,
 				CEBDA0881D3C052600DBDBD0 /* CDVAppDelegate.m */,
-				4F6D839819525B66003EBB16 /* AppDelegate.m */,
+				4F6D839819525B66003EBB16 /* AppDelegate.swift */,
 				4F6D839919525B66003EBB16 /* AppDelegate.h */,
 				8272301A19D764160066A350 /* InitialViewController.h */,
 				8272301B19D764160066A350 /* InitialViewController.m */,
@@ -1072,7 +1066,6 @@
 				B7168F6C1FACC29800A48DB5 /* LaunchScreen.storyboard in Resources */,
 				B7BAD7621FBB7DEE0046629F /* IDPLoginViewController.xib in Resources */,
 				824A9DC11724CE4600C9BD79 /* config.xml in Resources */,
-				CEBDA0B31D3C059900DBDBD0 /* MainViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1085,11 +1078,10 @@
 			files = (
 				8272301C19D764160066A350 /* InitialViewController.m in Sources */,
 				82AF5AB71A0DAA8D006C7A4B /* CDVLogger.m in Sources */,
-				CEBDA0B21D3C059900DBDBD0 /* MainViewController.m in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F3 /* ViewController.swift in Sources */,
 				CEBDA0891D3C052600DBDBD0 /* CDVAppDelegate.m in Sources */,
-				824A9BDE1721FCA400C9BD79 /* main.m in Sources */,
 				82638F0C19B8E1FD00FBB3C9 /* UIApplication+SalesforceHybridSDK.m in Sources */,
-				4F6D839B19525B66003EBB16 /* AppDelegate.m in Sources */,
+				4F6D839B19525B66003EBB16 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1198,7 +1190,9 @@
 					"$(OBJROOT)/UninstalledProducts/$(PLATFORM_NAME)/include",
 					"$(PROJECT_DIR)/../../../external/cordova/CordovaLib/Classes/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SWIFT_VERSION = 5.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/../../../shared/hybrid/SampleApp-Bridging-Header.h";
 				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "";
@@ -1252,7 +1246,9 @@
 					"$(OBJROOT)/UninstalledProducts/$(PLATFORM_NAME)/include",
 					"$(PROJECT_DIR)/../../../external/cordova/CordovaLib/Classes/**",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				SWIFT_VERSION = 5.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/../../../shared/hybrid/SampleApp-Bridging-Header.h";
 				LIBRARY_SEARCH_PATHS = "";
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = "";
@@ -1343,7 +1339,7 @@
 			repositoryURL = "https://github.com/sqlcipher/SQLCipher.swift";
 			requirement = {
 				kind = exactVersion;
-				version = 4.10.0;
+				version = 4.17.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

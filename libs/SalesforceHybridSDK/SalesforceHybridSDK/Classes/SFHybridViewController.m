@@ -39,6 +39,7 @@
 #import <SalesforceSDKCore/NSString+SFAdditions.h>
 #import <SalesforceSDKCore/SFRestAPI+Blocks.h>
 #import <Cordova/NSDictionary+CordovaPreferences.h>
+#import <Cordova/CDVPluginNotifications.h>
 #import <objc/message.h>
 #import <SalesforceSDKCore/SalesforceSDKCore-Swift.h>
 #import <SalesforceHybridSDK/SalesforceHybridSDK-Swift.h>
@@ -336,7 +337,6 @@ static NSString * const kHTTP = @"http";
     NSURL *errorPageUrl = [self fullFileUrlForPage:errorPage];
 
     WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
-    config.processPool = SFSDKWebViewStateManager.sharedProcessPool;
     self.errorPageWKWebView = [[WKWebView alloc] initWithFrame:self.view.frame configuration:config];
     self.errorPageWKWebView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     self.errorPageWKWebView.navigationDelegate = self;
@@ -379,13 +379,9 @@ static NSString * const kHTTP = @"http";
 - (NSString *)sfHybridViewUserAgentString
 {
     NSString *userAgentString = @"";
-    if ([SalesforceSDKManager sharedManager].userAgentString != NULL) {
-        if (_hybridViewConfig.isLocal) {
-            userAgentString = [SalesforceSDKManager sharedManager].userAgentString(@"Local");
-        } else {
-            userAgentString = [SalesforceSDKManager sharedManager].userAgentString(@"Remote");
-        }
-    }
+    SFUserAccount *currentUser = [SFUserAccountManager sharedInstance].currentUser;
+    NSString *qualifier = _hybridViewConfig.isLocal ? @"Local" : @"Remote";
+    userAgentString = [[SalesforceSDKManager sharedManager] userAgentString:qualifier forUser:currentUser];
     return userAgentString;
 }
 
