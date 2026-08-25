@@ -690,15 +690,22 @@ static NSString * const kHTTP = @"http";
     [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: Initiating post-auth configuration.", NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
     [self prepareWebState:^{
         if (originalUrl != nil) {
-            [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: Authentication complete. Loading '%@'.", NSStringFromClass([self class]), NSStringFromSelector(_cmd), originalUrl];
+            SFOAuthCredentials *creds = [SFUserAccountManager sharedInstance].currentUser.credentials;
+            [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: Authentication complete. Loading '%@'. tokenType=%@ shouldAttachDPoP=%d",
+             NSStringFromClass([self class]), NSStringFromSelector(_cmd), originalUrl,
+             creds.tokenType,
+             [SFSDKDPoPRequestDecorator shouldAttachDPoPForScope:creds.identifier tokenType:creds.tokenType]];
             NSURL *urlToLoad = [self absoluteUrlWithUrl:originalUrl];
             NSMutableURLRequest *newRequest = [NSMutableURLRequest requestWithURL:urlToLoad];
-            SFOAuthCredentials *creds = [SFUserAccountManager sharedInstance].currentUser.credentials;
             NSError *dpopError = nil;
             [SFSDKDPoPRequestDecorator applyAuthHeaders:newRequest credentials:creds error:&dpopError];
             if (dpopError) {
                 [SFSDKHybridLogger w:[self class] format:@"[%@ %@]: Failed to apply DPoP headers: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), dpopError];
             }
+            [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: Loading request. Authorization header present=%d DPoP header present=%d",
+             NSStringFromClass([self class]), NSStringFromSelector(_cmd),
+             ([newRequest valueForHTTPHeaderField:@"Authorization"] != nil),
+             ([newRequest valueForHTTPHeaderField:@"DPoP"] != nil)];
             [(WKWebView *)(self.webView) loadRequest:newRequest];
         }
     }];
@@ -711,13 +718,16 @@ static NSString * const kHTTP = @"http";
      * Performs a cheap REST call to refresh the access token if needed
      * instead of going through the entire OAuth dance all over again.
      */
+    [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: Sending cheap REST request to refresh credentials.", NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
     SFOAuthInfo *authInfo = [[SFOAuthInfo alloc] initWithAuthType:SFOAuthTypeRefresh];
     SFRestRequest *request = [[SFRestAPI sharedInstance] cheapRequest:nil];
     [[SFRestAPI sharedInstance] sendRequest:request failureBlock:^(id response, NSError *e, NSURLResponse *rawResponse) {
+        [SFSDKHybridLogger e:[self class] format:@"[%@ %@]: Cheap REST request FAILED: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), e];
         dispatch_async(dispatch_get_main_queue(), ^{
             failureBlock(authInfo, e);
         });
     } successBlock:^(id response, NSURLResponse *rawResponse) {
+        [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: Cheap REST request succeeded.", NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
         SFUserAccount *currentAccount = [SFUserAccountManager sharedInstance].currentUser;
         dispatch_async(dispatch_get_main_queue(), ^{
             completionBlock(authInfo, currentAccount);
