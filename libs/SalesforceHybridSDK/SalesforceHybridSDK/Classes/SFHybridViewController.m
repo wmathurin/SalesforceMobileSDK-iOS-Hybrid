@@ -526,6 +526,13 @@ static NSString * const kHTTP = @"http";
     [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: preparing web state.", NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        SFOAuthCredentials *creds = [SFUserAccountManager sharedInstance].currentUser.credentials;
+        if ([SFSDKDPoPRequestDecorator shouldAttachDPoPForScope:creds.identifier tokenType:creds.tokenType]) {
+            // DPoP session: page will be authenticated via DPoP headers on the request; cookies not used.
+            [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: DPoP session detected — skipping cookie bridge.", NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
+            if (completion) completion();
+            return;
+        }
 
         // Cleaning up old cookies
         [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: resetting session cookies.", NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
@@ -692,7 +699,13 @@ static NSString * const kHTTP = @"http";
         if (originalUrl != nil) {
             [SFSDKHybridLogger i:[self class] format:@"[%@ %@]: Authentication complete. Loading '%@'.", NSStringFromClass([self class]), NSStringFromSelector(_cmd), originalUrl];
             NSURL *urlToLoad = [self absoluteUrlWithUrl:originalUrl];
-            NSURLRequest *newRequest = [NSURLRequest requestWithURL:urlToLoad];
+            NSMutableURLRequest *newRequest = [NSMutableURLRequest requestWithURL:urlToLoad];
+            SFOAuthCredentials *creds = [SFUserAccountManager sharedInstance].currentUser.credentials;
+            NSError *dpopError = nil;
+            [SFSDKDPoPRequestDecorator applyAuthHeaders:newRequest credentials:creds error:&dpopError];
+            if (dpopError) {
+                [SFSDKHybridLogger w:[self class] format:@"[%@ %@]: Failed to apply DPoP headers: %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), dpopError];
+            }
             [(WKWebView *)(self.webView) loadRequest:newRequest];
         }
     }];
