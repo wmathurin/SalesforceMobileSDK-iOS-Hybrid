@@ -1,17 +1,30 @@
 name: Pull Request
 
 on:
-  pull_request_target:
+  # pull_request_target is required for fork PRs to receive secrets.
+  # Mitigated by per-job Member Check (see "Check Write Permission" / "Validate Write Permission").
+  pull_request_target:  # zizmor: ignore[dangerous-triggers]
     branches: [dev, master]
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
+      - '.gitignore'
+      - 'CODEOWNERS'
+
+permissions:
+  contents: read
 
 jobs:
   static-analysis:
     runs-on: macos-latest
+    permissions:
+      contents: read
+      pull-requests: write
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/.github/DangerFiles/Gemfile
     steps:
       - name: Check Write Permission
-        uses: octokit/request-action@v2.x
+        uses: octokit/request-action@dad4362715b7fb2ddedf9772c8670824af564f0d  # v2.4.0
         id: check_permissions
         with:
           route: GET /repos/${{ github.repository }}/collaborators/${{ github.triggering_actor }}/permission
@@ -29,8 +42,9 @@ jobs:
             exit 1
           fi
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4.3.1
         with:
+          persist-credentials: false
           # We need a sufficient depth or Danger will occasionally run into issues checking which files were modified.
           fetch-depth: 100
           # This is dangerous without the member check
@@ -43,7 +57,7 @@ jobs:
         run:
           xcodebuild analyze -workspace SalesforceMobileSDK-Hybrid.xcworkspace -scheme MobileSync -sdk 'iphonesimulator' \
           CLANG_ANALYZER_OUTPUT=plist-html CLANG_ANALYZER_OUTPUT_DIR=./clangReport RUN_CLANG_STATIC_ANALYZER=YES
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@afeafc3d1ab54a631816aba4c914a0081c12ff2f  # v1.310.0
         with:
           ruby-version: '3.3'
           bundler-cache: true
@@ -64,7 +78,12 @@ jobs:
       lib: ${{ matrix.lib }}
       ios: ${{ matrix.ios }}
       is_pr: true
-    secrets: inherit
+    permissions:
+      contents: read
+      pull-requests: write
+    secrets:
+      TEST_CREDENTIALS: ${{ secrets.TEST_CREDENTIALS }}
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   hybrid-samples-pr:
     needs: [static-analysis]
@@ -76,4 +95,5 @@ jobs:
     with:
       app: ${{ matrix.app }}
       is_pr: true
-    secrets: inherit
+    permissions:
+      contents: read
