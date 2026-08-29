@@ -1934,7 +1934,7 @@
 			repositoryURL = "https://github.com/apache/cordova-ios";
 			requirement = {
 				kind = revision;
-				revision = f1011cf7a7a033539140d5678db15e1641607ae2;
+				revision = e1abace870796357d4bae063c17f752dd2952c01;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
