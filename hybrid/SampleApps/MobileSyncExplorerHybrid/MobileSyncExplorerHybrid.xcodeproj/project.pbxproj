@@ -1022,7 +1022,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8272301C19D764160066A350 /* InitialViewController.m in Sources */,
-				82AF5AE61A0DADA4006C7A4B /* CDVLogger.m in Sources */,
 				82638F0C19B8E1FD00FBB3C9 /* UIApplication+SalesforceHybridSDK.m in Sources */,
 				4F6D839B19525B66003EBB16 /* AppDelegate.swift in Sources */,
 			);
