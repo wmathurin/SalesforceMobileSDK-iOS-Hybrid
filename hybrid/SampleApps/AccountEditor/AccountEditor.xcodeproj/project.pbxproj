@@ -17,7 +17,6 @@
 		4F6D68DB228E3129008C8A96 /* MobileSync.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE15E38D2213A719003BBAC7 /* MobileSync.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F6D68E4228E3129008C8A96 /* SmartStore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE15E39D2213A71B003BBAC7 /* SmartStore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4F6D68EC228E3129008C8A96 /* SalesforceHybridSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFEE5FE1BFE912300B7AA8A /* SalesforceHybridSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		CEAEFF012214C1B1009D9400 /* Cordova in Frameworks */ = {isa = PBXBuildFile; productRef = CEAEFF022214C1B1009D9400 /* Cordova */; };
 		4F6D839B19525B66003EBB16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F6D839819525B66003EBB16 /* AppDelegate.swift */; };
 		4FD3FC441DB05B2600646D6D /* force+promise.js in Copy js Files */ = {isa = PBXBuildFile; fileRef = 4FD3FC1F1DB05B1E00646D6D /* force+promise.js */; };
 		4FF15E871908856800705FE0 /* AccountEditor.html in Copy Shared www Files */ = {isa = PBXBuildFile; fileRef = 4FF15E2A190884FE00705FE0 /* AccountEditor.html */; };
@@ -452,7 +451,6 @@
 				CE15E3A72213A74D003BBAC7 /* SmartStore.framework in Frameworks */,
 				CE15E3A82213A74D003BBAC7 /* MobileSync.framework in Frameworks */,
 				CE15E3A42213A745003BBAC7 /* SalesforceAnalytics.framework in Frameworks */,
-				CEAEFF012214C1B1009D9400 /* Cordova in Frameworks */,
 				CE15E3A52213A745003BBAC7 /* SalesforceSDKCommon.framework in Frameworks */,
 				CE15E3A62213A745003BBAC7 /* SalesforceSDKCore.framework in Frameworks */,
 				CED747481E8C86EB0019AA9D /* WebKit.framework in Frameworks */,
@@ -829,7 +827,6 @@
 			packageReferences = (
 				693387DB2E83347800F667A7 /* XCRemoteSwiftPackageReference "fmdb" */,
 				693387DE2E83348A00F667A7 /* XCRemoteSwiftPackageReference "SQLCipher" */,
-				CEAEFF032214C1B1009D9400 /* XCRemoteSwiftPackageReference "cordova-ios" */,
 			);
 			productRefGroup = 824A9BCF1721FCA400C9BD79 /* Products */;
 			projectDirPath = "";
@@ -1273,14 +1270,6 @@
 				version = 4.17.0;
 			};
 		};
-		CEAEFF032214C1B1009D9400 /* XCRemoteSwiftPackageReference "cordova-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apache/cordova-ios";
-			requirement = {
-				kind = revision;
-				revision = e1abace870796357d4bae063c17f752dd2952c01;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1293,11 +1282,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 693387DE2E83348A00F667A7 /* XCRemoteSwiftPackageReference "SQLCipher" */;
 			productName = SQLCipher;
-		};
-		CEAEFF022214C1B1009D9400 /* Cordova */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CEAEFF032214C1B1009D9400 /* XCRemoteSwiftPackageReference "cordova-ios" */;
-			productName = Cordova;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
