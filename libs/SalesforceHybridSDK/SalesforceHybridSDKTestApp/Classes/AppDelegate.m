@@ -68,7 +68,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Window and view state are set up in SceneDelegate on iOS 13+ (UIScene lifecycle).
+    // Refresh the access token now, before the scene connects and before XCTest
+    // starts running. synchronousAuthRefresh spins the run loop while waiting for
+    // the network; doing it here avoids a deadlock where setUp's 15-second polling
+    // loop traps the auth spin under it, preventing viewController from being created.
+    [TestSetupUtils synchronousAuthRefresh];
     return YES;
 }
 
@@ -184,7 +188,6 @@ configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
         });
         return;
     }
-    [TestSetupUtils synchronousAuthRefresh];
     self.viewController = [[SFHybridViewController alloc] initWithConfig:self.testAppHybridViewConfig];
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];

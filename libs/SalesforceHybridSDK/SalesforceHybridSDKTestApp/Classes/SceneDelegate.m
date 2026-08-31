@@ -34,11 +34,7 @@
     appDelegate.window = [[UIWindow alloc] initWithWindowScene:windowScene];
     appDelegate.window.autoresizesSubviews = YES;
     self.window = appDelegate.window;
-    // Dispatch so willConnectToSession returns before the synchronous auth refresh
-    // runs. Blocking here delays WKWebView startup past the JS test runner timeout.
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [appDelegate initializeAppViewState];
-    });
+    [appDelegate initializeAppViewState];
 }
 
 @end
