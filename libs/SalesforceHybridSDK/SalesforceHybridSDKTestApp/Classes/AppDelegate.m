@@ -68,10 +68,15 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.autoresizesSubviews = YES;
-    [self initializeAppViewState];
+    // Window and view state are set up in SceneDelegate on iOS 13+ (UIScene lifecycle).
     return YES;
+}
+
+- (UISceneConfiguration *)application:(UIApplication *)application
+configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
+                               options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0)) {
+    return [[UISceneConfiguration alloc] initWithName:@"Default Configuration"
+                                          sessionRole:connectingSceneSession.role];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
