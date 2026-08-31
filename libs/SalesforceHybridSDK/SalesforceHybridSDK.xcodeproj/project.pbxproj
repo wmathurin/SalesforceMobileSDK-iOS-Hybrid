@@ -61,7 +61,6 @@
 		822272A119C39F4500FC537E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 82EFF30016E8049500A63CDF /* UIKit.framework */; };
 		829DA2B11C12677B0040F5F1 /* SalesforceHybridSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 829DA2B01C12677B0040F5F1 /* SalesforceHybridSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		82AB22651F9EB9C100A754C8 /* SFHybridViewConfigTestSuite.m in Sources */ = {isa = PBXBuildFile; fileRef = 82AB22641F9EB9C100A754C8 /* SFHybridViewConfigTestSuite.m */; };
-		82AF5A6B1A0D911D006C7A4B /* CDVLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 82AF5A651A0D911D006C7A4B /* CDVLogger.m */; };
 		82AF5A6F1A0D9277006C7A4B /* console-via-logger.js in Copy cordova-plugin-console plugin */ = {isa = PBXBuildFile; fileRef = 82AF5A691A0D911D006C7A4B /* console-via-logger.js */; };
 		82AF5A701A0D9277006C7A4B /* logger.js in Copy cordova-plugin-console plugin */ = {isa = PBXBuildFile; fileRef = 82AF5A6A1A0D911D006C7A4B /* logger.js */; };
 		82AF5A8C1A0D9E2B006C7A4B /* SFTestRunnerPlugin.js in Copy Salesforce plugin */ = {isa = PBXBuildFile; fileRef = 82AF5A891A0D9A0A006C7A4B /* SFTestRunnerPlugin.js */; };
@@ -1482,7 +1481,6 @@
 				82EFF30C16E8049500A63CDF /* main.m in Sources */,
 				82EFF34416E80B6300A63CDF /* AppDelegate.m in Sources */,
 				82EFF39F16E816CB00A63CDF /* SFTestRunnerPlugin.m in Sources */,
-				82AF5A6B1A0D911D006C7A4B /* CDVLogger.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
