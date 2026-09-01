@@ -1,11 +1,11 @@
 /*
  SFNetworkPlugin.m
  SalesforceHybridSDK
- 
+
  Created by Bharath Hariharan on 9/14/16.
- 
+
  Copyright (c) 2016-present, salesforce.com, inc. All rights reserved.
- 
+
  Redistribution and use of this software in source and binary forms, with or without modification,
  are permitted provided that the following conditions are met:
  * Redistributions of source code must retain the above copyright notice, this list of conditions
@@ -16,7 +16,7 @@
  * Neither the name of salesforce.com, inc. nor the names of its contributors may be used to
  endorse or promote products derived from this software without specific prior written
  permission of salesforce.com, inc.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
@@ -54,11 +54,24 @@ static NSString * const kContentType     = @"contentType";
 static NSString * const kHttpContentType = @"content-type";
 static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthentication";
 
+@interface SFNetworkPlugin ()
+
+- (BOOL)isTrustedCallerURL:(NSURL *)url;
+
+@end
+
 @implementation SFNetworkPlugin
 
 - (void) pgSendRequest:(CDVInvokedUrlCommand *) command
 {
     NSDictionary *argsDict = [self getArgument:command.arguments atIndex:0];
+    NSURL *callerURL = self.webView.URL;
+    if (![self isTrustedCallerURL:callerURL]) {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
+                                                 messageAsString:@"pgSendRequest blocked: untrusted caller origin"];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+        return;
+    }
     SFRestMethod method = [SFRestRequest sfRestMethodFromHTTPMethod:[argsDict sfsdk_nonNullObjectForKey:kMethodArg]];
     NSString* endPoint = [argsDict sfsdk_nonNullObjectForKey:kEndPointArg];
     NSString* path = [argsDict sfsdk_nonNullObjectForKey:kPathArg];
@@ -77,11 +90,11 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
     NSMutableDictionary<NSString*, NSString*>* headerParams = [argsDict sfsdk_nonNullObjectForKey:kHeaderParams];
     NSDictionary<NSString*, NSDictionary*>* fileParams = [argsDict sfsdk_nonNullObjectForKey:kfileParams];
     BOOL returnBinary = [argsDict sfsdk_nonNullObjectForKey:kReturnBinary] != nil && [[argsDict sfsdk_nonNullObjectForKey:kReturnBinary] boolValue];
-    
+
     BOOL doesNotRequireAuthentication = [argsDict sfsdk_nonNullObjectForKey:kDoesNotRequireAuthentication] != nil && [[argsDict sfsdk_nonNullObjectForKey:kDoesNotRequireAuthentication] boolValue];
-    
+
     SFRestRequest* request = nil;
-    
+
     // Sets HTTP body explicitly for a POST, PATCH or PUT request.
     if (method == SFRestMethodPOST || method == SFRestMethodPATCH || method == SFRestMethodPUT) {
         request = [SFRestRequest requestWithMethod:method path:path queryParams:nil];
@@ -91,17 +104,17 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
     } else {
         request = [SFRestRequest requestWithMethod:method path:path queryParams:queryParams];
     }
-    
+
     request.requiresAuthentication = !doesNotRequireAuthentication;
     // Adds custom headers, if any.
     [request setCustomHeaders:headerParams];
     if (endPoint) {
         [request setEndpoint:endPoint];
     }
-    
+
     // Sets body for a file POST request.
     if (fileParams) {
-        
+
         /*
          * File params expected to be of the form:
          * {<fileParamNameInPost>: {fileMimeType:<someMimeType>, fileUrl:<fileUrl>, fileName:<fileNameForPost>}}.
@@ -116,15 +129,15 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
             [request addPostFileData:fileData paramName:fileParamName fileName:fileName mimeType:fileMimeType params:queryParams];
         }
     }
-    
+
     // Disable parsing for binary request
     if (returnBinary) {
         request.parseResponse = NO;
     }
-    
+
     __weak typeof(self) weakSelf = self;
     SFRestAPI *restApiInstance = doesNotRequireAuthentication ? [SFRestAPI sharedGlobalInstance] : [SFRestAPI sharedInstance];
-    
+
     [restApiInstance sendRequest:request
                                       failureBlock:^(id response, NSError *e, NSURLResponse *rawResponse) {
                                           __strong typeof(self) strongSelf = weakSelf;
@@ -151,7 +164,7 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
                                                                    kContentType:((NSHTTPURLResponse*) rawResponse).allHeaderFields[kHttpContentType]
                                                                    };
                                           pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
-                                        
+
                                       }
                                       // Some response
                                       else if (response) {
@@ -169,7 +182,7 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
                                       else {
                                           pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
                                       }
-                                      
+
                                       [strongSelf.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
                                   }
      ];
@@ -178,6 +191,21 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
 - (NSString *)stringForResponse:(NSData *)response encodingName:(NSString *)encodingName {
     NSStringEncoding encodingType = encodingName == nil ? NSUTF8StringEncoding :  CFStringConvertEncodingToNSStringEncoding(CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName));
     return [[NSString alloc] initWithData:response encoding:encodingType];
+}
+
+// Trusted origins mirror the <access origin> entries in
+// SalesforceMobileSDK-CordovaPlugin/plugin.xml.
+// If that list changes, update this method to match.
+- (BOOL)isTrustedCallerURL:(NSURL *)url {
+    if (!url) return NO;
+    if ([url.scheme isEqualToString:@"file"]) return YES;
+    NSString *host = url.host ?: @"";
+    if ([host isEqualToString:@"localhost"]) return YES;
+    for (NSString *suffix in @[@".salesforce.com", @".force.com", @".visualforce.com",
+                                @".documentforce.com", @".salesforce-communities.com"]) {
+        if ([host hasSuffix:suffix]) return YES;
+    }
+    return NO;
 }
 
 @end
