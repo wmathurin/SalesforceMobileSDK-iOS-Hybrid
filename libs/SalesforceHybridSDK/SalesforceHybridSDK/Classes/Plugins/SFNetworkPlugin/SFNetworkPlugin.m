@@ -57,6 +57,7 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
 
 @interface SFNetworkPlugin ()
 
+- (BOOL)isTrustedCallerURL:(NSURL *)url;
 - (BOOL)isTrustedSalesforceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL;
 
 @end
@@ -66,14 +67,14 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
 - (void) pgSendRequest:(CDVInvokedUrlCommand *) command
 {
     NSDictionary *argsDict = [self getArgument:command.arguments atIndex:0];
-    NSURL *instanceURL = [SFUserAccountManager sharedInstance].currentUserAccount.credentials.instanceUrl;
     NSURL *callerURL = ((WKWebView *)self.webView).URL;
-    if (![self isTrustedSalesforceURL:callerURL instanceURL:instanceURL]) {
+    if (![self isTrustedCallerURL:callerURL]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                  messageAsString:@"pgSendRequest blocked: untrusted caller origin"];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         return;
     }
+    NSURL *instanceURL = [SFUserAccountManager sharedInstance].currentUserAccount.credentials.instanceUrl;
     SFRestMethod method = [SFRestRequest sfRestMethodFromHTTPMethod:[argsDict sfsdk_nonNullObjectForKey:kMethodArg]];
     NSString* endPoint = [argsDict sfsdk_nonNullObjectForKey:kEndPointArg];
     NSString* path = [argsDict sfsdk_nonNullObjectForKey:kPathArg];
@@ -199,8 +200,22 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
     return [[NSString alloc] initWithData:response encoding:encodingType];
 }
 
-// Allow only the local dev host or the current user's exact instance URL.
-// Rejects broad Salesforce wildcard domains to prevent cross-tenant access.
+// Allow any Salesforce-owned domain, localhost, or file:// (Cordova local app).
+- (BOOL)isTrustedCallerURL:(NSURL *)url {
+    if (!url) return NO;
+    NSString *host = url.host ?: @"";
+    NSString *scheme = url.scheme ?: @"";
+    if ([host isEqualToString:@"localhost"]) return YES;
+    if ([scheme isEqualToString:@"file"]) return YES;
+    NSArray<NSString *> *trustedSuffixes = @[@".salesforce.com", @".force.com", @".visualforce.com"];
+    for (NSString *suffix in trustedSuffixes) {
+        if ([host hasSuffix:suffix]) return YES;
+    }
+    return NO;
+}
+
+// Allow only the current user's exact instance URL (used to decide whether to attach auth tokens).
+// Rejects broad Salesforce wildcard domains to prevent cross-tenant token leakage.
 - (BOOL)isTrustedSalesforceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL {
     if (!url) return NO;
     NSString *host = url.host ?: @"";
