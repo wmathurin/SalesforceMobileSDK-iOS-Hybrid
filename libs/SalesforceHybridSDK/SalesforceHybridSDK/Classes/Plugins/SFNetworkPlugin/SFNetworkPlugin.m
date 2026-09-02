@@ -57,7 +57,7 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
 
 @interface SFNetworkPlugin ()
 
-- (BOOL)isTrustedCallerURL:(NSURL *)url;
+- (BOOL)isTrustedSalesforceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL;
 
 @end
 
@@ -66,8 +66,9 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
 - (void) pgSendRequest:(CDVInvokedUrlCommand *) command
 {
     NSDictionary *argsDict = [self getArgument:command.arguments atIndex:0];
+    NSURL *instanceURL = [SFUserAccountManager sharedInstance].currentUserAccount.credentials.instanceUrl;
     NSURL *callerURL = ((WKWebView *)self.webView).URL;
-    if (![self isTrustedCallerURL:callerURL]) {
+    if (![self isTrustedSalesforceURL:callerURL instanceURL:instanceURL]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                  messageAsString:@"pgSendRequest blocked: untrusted caller origin"];
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
@@ -93,6 +94,10 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
     BOOL returnBinary = [argsDict sfsdk_nonNullObjectForKey:kReturnBinary] != nil && [[argsDict sfsdk_nonNullObjectForKey:kReturnBinary] boolValue];
 
     BOOL doesNotRequireAuthentication = [argsDict sfsdk_nonNullObjectForKey:kDoesNotRequireAuthentication] != nil && [[argsDict sfsdk_nonNullObjectForKey:kDoesNotRequireAuthentication] boolValue];
+    // Strip auth if the endPoint targets a non-instance host; never send OAuth tokens off-instance.
+    if (endPoint.length > 0 && ![self isTrustedSalesforceURL:[NSURL URLWithString:endPoint] instanceURL:instanceURL]) {
+        doesNotRequireAuthentication = YES;
+    }
 
     SFRestRequest* request = nil;
 
@@ -194,19 +199,17 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
     return [[NSString alloc] initWithData:response encoding:encodingType];
 }
 
-// Trusted origins mirror the <access origin> entries in
-// SalesforceMobileSDK-CordovaPlugin/plugin.xml.
-// If that list changes, update this method to match.
-- (BOOL)isTrustedCallerURL:(NSURL *)url {
+// Allow only the local dev host or the current user's exact instance URL.
+// Rejects broad Salesforce wildcard domains to prevent cross-tenant access.
+- (BOOL)isTrustedSalesforceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL {
     if (!url) return NO;
-    if ([url.scheme isEqualToString:@"file"]) return YES;
     NSString *host = url.host ?: @"";
+    // localhost is trusted for local hybrid apps (http or https)
     if ([host isEqualToString:@"localhost"]) return YES;
-    for (NSString *suffix in @[@".salesforce.com", @".force.com", @".visualforce.com",
-                                @".documentforce.com", @".salesforce-communities.com"]) {
-        if ([host hasSuffix:suffix]) return YES;
-    }
-    return NO;
+    // All other hosts require https
+    if (![url.scheme isEqualToString:@"https"]) return NO;
+    // Allow only the authenticated user's own instance host
+    return instanceURL != nil && [host isEqualToString:instanceURL.host];
 }
 
 @end

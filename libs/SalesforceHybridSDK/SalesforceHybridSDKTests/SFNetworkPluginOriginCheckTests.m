@@ -31,13 +31,14 @@
 // Expose private method for testing.
 @interface SFNetworkPlugin (Testing)
 
-- (BOOL)isTrustedCallerURL:(NSURL *)url;
+- (BOOL)isTrustedSalesforceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL;
 
 @end
 
 @interface SFNetworkPluginOriginCheckTests : XCTestCase
 
 @property (nonatomic, strong) SFNetworkPlugin *plugin;
+@property (nonatomic, strong) NSURL *instanceURL;
 
 @end
 
@@ -46,86 +47,114 @@
 - (void)setUp {
     [super setUp];
     self.plugin = [[SFNetworkPlugin alloc] init];
+    self.instanceURL = [NSURL URLWithString:@"https://myorg.my.salesforce.com"];
 }
 
 - (void)tearDown {
     self.plugin = nil;
+    self.instanceURL = nil;
     [super tearDown];
 }
 
-#pragma mark - Trusted origins
+#pragma mark - localhost is always trusted
 
-- (void)testFileSchemeIsTrusted {
-    NSURL *url = [NSURL URLWithString:@"file:///www/index.html"];
-    XCTAssertTrue([self.plugin isTrustedCallerURL:url],
-                  @"file:// URLs must be trusted (local hybrid apps)");
-}
-
-- (void)testSalesforceComIsTrusted {
-    NSURL *url = [NSURL URLWithString:@"https://myorg.salesforce.com"];
-    XCTAssertTrue([self.plugin isTrustedCallerURL:url],
-                  @"*.salesforce.com must be trusted");
-}
-
-- (void)testMySalesforceComIsTrusted {
-    NSURL *url = [NSURL URLWithString:@"https://myorg.my.salesforce.com"];
-    XCTAssertTrue([self.plugin isTrustedCallerURL:url],
-                  @"*.my.salesforce.com must be trusted (ends with .salesforce.com)");
-}
-
-- (void)testVisualforceComIsTrusted {
-    NSURL *url = [NSURL URLWithString:@"https://mypage.visualforce.com"];
-    XCTAssertTrue([self.plugin isTrustedCallerURL:url],
-                  @"*.visualforce.com must be trusted");
-}
-
-- (void)testForceComIsTrusted {
-    NSURL *url = [NSURL URLWithString:@"https://mypage.force.com"];
-    XCTAssertTrue([self.plugin isTrustedCallerURL:url],
-                  @"*.force.com must be trusted");
-}
-
-- (void)testDocumentforceComIsTrusted {
-    NSURL *url = [NSURL URLWithString:@"https://docs.documentforce.com"];
-    XCTAssertTrue([self.plugin isTrustedCallerURL:url],
-                  @"*.documentforce.com must be trusted");
-}
-
-- (void)testSalesforceCommunitiesComIsTrusted {
-    NSURL *url = [NSURL URLWithString:@"https://mysite.salesforce-communities.com"];
-    XCTAssertTrue([self.plugin isTrustedCallerURL:url],
-                  @"*.salesforce-communities.com must be trusted");
-}
-
-- (void)testLocalhostIsTrusted {
+- (void)testHttpsLocalhostIsTrusted {
     NSURL *url = [NSURL URLWithString:@"https://localhost"];
-    XCTAssertTrue([self.plugin isTrustedCallerURL:url],
-                  @"localhost must be trusted");
+    XCTAssertTrue([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                  @"https://localhost must be trusted");
 }
 
-#pragma mark - Untrusted origins
+- (void)testHttpLocalhostIsTrusted {
+    NSURL *url = [NSURL URLWithString:@"http://localhost:8080/index.html"];
+    XCTAssertTrue([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                  @"http://localhost must be trusted (local hybrid dev server)");
+}
+
+#pragma mark - Exact instance URL host is trusted
+
+- (void)testExactInstanceUrlIsTrusted {
+    NSURL *url = [NSURL URLWithString:@"https://myorg.my.salesforce.com/path"];
+    XCTAssertTrue([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                  @"The user's own instance URL must be trusted");
+}
+
+- (void)testInstanceUrlWithApiPathIsTrusted {
+    NSURL *url = [NSURL URLWithString:@"https://myorg.my.salesforce.com/services/data/v60.0"];
+    XCTAssertTrue([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                  @"A request path under the instance URL must be trusted");
+}
+
+#pragma mark - Other Salesforce domains are NOT trusted
+
+- (void)testOtherSalesforceOrgIsNotTrusted {
+    NSURL *url = [NSURL URLWithString:@"https://otherorg.my.salesforce.com"];
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                   @"A different Salesforce org must NOT be trusted");
+}
+
+- (void)testWildcardSalesforceComIsNotTrusted {
+    NSURL *url = [NSURL URLWithString:@"https://anything.salesforce.com"];
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                   @"Broad *.salesforce.com wildcard must NOT be trusted");
+}
+
+- (void)testForceComIsNotTrusted {
+    NSURL *url = [NSURL URLWithString:@"https://mypage.force.com"];
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                   @"*.force.com must NOT be trusted (cross-tenant risk)");
+}
+
+- (void)testVisualforceComIsNotTrusted {
+    NSURL *url = [NSURL URLWithString:@"https://mypage.visualforce.com"];
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                   @"*.visualforce.com must NOT be trusted (cross-tenant risk)");
+}
+
+#pragma mark - Arbitrary hosts are NOT trusted
 
 - (void)testEvilComIsNotTrusted {
     NSURL *url = [NSURL URLWithString:@"https://evil.com"];
-    XCTAssertFalse([self.plugin isTrustedCallerURL:url],
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
                    @"evil.com must NOT be trusted");
 }
 
-- (void)testNotSalesforceComIsNotTrusted {
-    NSURL *url = [NSURL URLWithString:@"https://notsalesforce.com"];
-    XCTAssertFalse([self.plugin isTrustedCallerURL:url],
-                   @"notsalesforce.com must NOT be trusted");
+- (void)testSpoofedSalesforceComIsNotTrusted {
+    NSURL *url = [NSURL URLWithString:@"https://evil-salesforce.com"];
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                   @"evil-salesforce.com must NOT be trusted");
 }
 
-- (void)testEvilSalesforceComIsNotTrusted {
-    NSURL *url = [NSURL URLWithString:@"https://evil-salesforce.com"];
-    XCTAssertFalse([self.plugin isTrustedCallerURL:url],
-                   @"evil-salesforce.com must NOT be trusted (does not end with .salesforce.com)");
+#pragma mark - Scheme is enforced for non-localhost
+
+- (void)testFileSchemeIsNotTrusted {
+    NSURL *url = [NSURL URLWithString:@"file:///www/index.html"];
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                   @"file:// must NOT be trusted (modern Cordova uses https://localhost)");
 }
+
+- (void)testHttpInstanceUrlIsNotTrusted {
+    NSURL *url = [NSURL URLWithString:@"http://myorg.my.salesforce.com"];
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:self.instanceURL],
+                   @"http:// instance URL must NOT be trusted (https required)");
+}
+
+#pragma mark - Edge cases
 
 - (void)testNilURLIsNotTrusted {
-    XCTAssertFalse([self.plugin isTrustedCallerURL:nil],
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:nil instanceURL:self.instanceURL],
                    @"nil URL must NOT be trusted");
+}
+
+- (void)testNilInstanceURLBlocksNonLocalhost {
+    NSURL *url = [NSURL URLWithString:@"https://myorg.my.salesforce.com"];
+    XCTAssertFalse([self.plugin isTrustedSalesforceURL:url instanceURL:nil],
+                   @"Without an authenticated instance URL, non-localhost must be blocked");
+}
+
+- (void)testNilInstanceURLAllowsLocalhost {
+    NSURL *url = [NSURL URLWithString:@"https://localhost"];
+    XCTAssertTrue([self.plugin isTrustedSalesforceURL:url instanceURL:nil],
+                  @"localhost is trusted even without an authenticated session");
 }
 
 @end
