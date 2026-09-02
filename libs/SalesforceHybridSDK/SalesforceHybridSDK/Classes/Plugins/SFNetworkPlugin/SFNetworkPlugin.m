@@ -29,6 +29,7 @@
 
 #import "SFNetworkPlugin.h"
 #import "CDVPlugin+SFAdditions.h"
+#import <WebKit/WebKit.h>
 #import <SalesforceSDKCore/NSDictionary+SFAdditions.h>
 #import <SalesforceSDKCore/NSURLResponse+SFAdditions.h>
 #import <SalesforceSDKCore/SFRestAPI+Blocks.h>
@@ -65,7 +66,7 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
 - (void) pgSendRequest:(CDVInvokedUrlCommand *) command
 {
     NSDictionary *argsDict = [self getArgument:command.arguments atIndex:0];
-    NSURL *callerURL = self.webView.URL;
+    NSURL *callerURL = ((WKWebView *)self.webView).URL;
     if (![self isTrustedCallerURL:callerURL]) {
         CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR
                                                  messageAsString:@"pgSendRequest blocked: untrusted caller origin"];
