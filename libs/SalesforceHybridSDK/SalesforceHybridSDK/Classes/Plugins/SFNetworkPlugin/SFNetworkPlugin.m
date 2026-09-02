@@ -33,6 +33,7 @@
 #import <SalesforceSDKCore/NSDictionary+SFAdditions.h>
 #import <SalesforceSDKCore/NSURLResponse+SFAdditions.h>
 #import <SalesforceSDKCore/SFRestAPI+Blocks.h>
+#import <SalesforceSDKCore/SFUserAccountManager.h>
 #import <SalesforceSDKCore/SalesforceSDKCore-Swift.h>
 #import <SalesforceSDKCommon/SFJsonUtils.h>
 
@@ -74,7 +75,7 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
         return;
     }
-    NSURL *instanceURL = [SFUserAccountManager sharedInstance].currentUserAccount.credentials.instanceUrl;
+    NSURL *instanceURL = [SFUserAccountManager sharedInstance].currentUser.credentials.instanceUrl;
     SFRestMethod method = [SFRestRequest sfRestMethodFromHTTPMethod:[argsDict sfsdk_nonNullObjectForKey:kMethodArg]];
     NSString* endPoint = [argsDict sfsdk_nonNullObjectForKey:kEndPointArg];
     NSString* path = [argsDict sfsdk_nonNullObjectForKey:kPathArg];
@@ -200,13 +201,20 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
     return [[NSString alloc] initWithData:response encoding:encodingType];
 }
 
-// Allow any Salesforce-owned domain, localhost, or file:// (Cordova local app).
+// Allow localhost, packaged app assets (file:// within bundle www/), or any Salesforce-owned domain over https.
 - (BOOL)isTrustedCallerURL:(NSURL *)url {
     if (!url) return NO;
     NSString *host = url.host ?: @"";
     NSString *scheme = url.scheme ?: @"";
+    // localhost is trusted for local hybrid apps (Cordova uses https://localhost on modern iOS)
     if ([host isEqualToString:@"localhost"]) return YES;
-    if ([scheme isEqualToString:@"file"]) return YES;
+    // file:// only trusted for content served from the packaged www/ directory in the app bundle
+    if ([scheme isEqualToString:@"file"]) {
+        NSString *bundleWWWPath = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"www"];
+        return [(url.path ?: @"") hasPrefix:bundleWWWPath];
+    }
+    // Salesforce-owned domains require https (no http or other schemes)
+    if (![scheme isEqualToString:@"https"]) return NO;
     NSArray<NSString *> *trustedSuffixes = @[@".salesforce.com", @".force.com", @".visualforce.com"];
     for (NSString *suffix in trustedSuffixes) {
         if ([host hasSuffix:suffix]) return YES;

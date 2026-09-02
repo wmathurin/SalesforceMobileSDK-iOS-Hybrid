@@ -67,8 +67,19 @@
     XCTAssertTrue([self.plugin isTrustedCallerURL:[NSURL URLWithString:@"http://localhost:8080/index.html"]]);
 }
 
-- (void)testCaller_FileSchemeIsTrusted {
-    XCTAssertTrue([self.plugin isTrustedCallerURL:[NSURL URLWithString:@"file:///www/index.html"]]);
+- (void)testCaller_FileInBundleWWWIsTrusted {
+    NSString *bundleWWW = [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent:@"www/index.html"];
+    NSURL *url = [NSURL fileURLWithPath:bundleWWW];
+    XCTAssertTrue([self.plugin isTrustedCallerURL:url]);
+}
+
+- (void)testCaller_FileOutsideBundleWWWIsNotTrusted {
+    NSURL *url = [NSURL URLWithString:@"file:///tmp/evil.html"];
+    XCTAssertFalse([self.plugin isTrustedCallerURL:url]);
+}
+
+- (void)testCaller_HttpSalesforceComIsNotTrusted {
+    XCTAssertFalse([self.plugin isTrustedCallerURL:[NSURL URLWithString:@"http://myorg.my.salesforce.com"]]);
 }
 
 - (void)testCaller_SalesforceComIsTrusted {
