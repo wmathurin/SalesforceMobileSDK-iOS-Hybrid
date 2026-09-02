@@ -58,7 +58,7 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
 @interface SFNetworkPlugin ()
 
 - (BOOL)isTrustedCallerURL:(NSURL *)url;
-- (BOOL)isTrustedSalesforceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL;
+- (BOOL)isInstanceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL;
 
 @end
 
@@ -95,8 +95,8 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
     BOOL returnBinary = [argsDict sfsdk_nonNullObjectForKey:kReturnBinary] != nil && [[argsDict sfsdk_nonNullObjectForKey:kReturnBinary] boolValue];
 
     BOOL doesNotRequireAuthentication = [argsDict sfsdk_nonNullObjectForKey:kDoesNotRequireAuthentication] != nil && [[argsDict sfsdk_nonNullObjectForKey:kDoesNotRequireAuthentication] boolValue];
-    // Strip auth if the endPoint targets a non-instance host; never send OAuth tokens off-instance.
-    if (endPoint.length > 0 && ![self isTrustedSalesforceURL:[NSURL URLWithString:endPoint] instanceURL:instanceURL]) {
+    // Strip auth if the endPoint is not the authenticated instance; never send OAuth tokens elsewhere.
+    if (endPoint.length > 0 && ![self isInstanceURL:[NSURL URLWithString:endPoint] instanceURL:instanceURL]) {
         doesNotRequireAuthentication = YES;
     }
 
@@ -214,17 +214,13 @@ static NSString * const kDoesNotRequireAuthentication = @"doesNotRequireAuthenti
     return NO;
 }
 
-// Allow only the current user's exact instance URL (used to decide whether to attach auth tokens).
-// Rejects broad Salesforce wildcard domains to prevent cross-tenant token leakage.
-- (BOOL)isTrustedSalesforceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL {
-    if (!url) return NO;
-    NSString *host = url.host ?: @"";
-    // localhost is trusted for local hybrid apps (http or https)
-    if ([host isEqualToString:@"localhost"]) return YES;
-    // All other hosts require https
+// Returns YES only if url points to the authenticated user's exact instance host (https required).
+// Used to decide whether to attach OAuth tokens; localhost is intentionally excluded.
+- (BOOL)isInstanceURL:(NSURL *)url instanceURL:(NSURL *)instanceURL {
+    if (!url || !instanceURL) return NO;
     if (![url.scheme isEqualToString:@"https"]) return NO;
-    // Allow only the authenticated user's own instance host
-    return instanceURL != nil && [host isEqualToString:instanceURL.host];
+    NSString *host = url.host ?: @"";
+    return [host isEqualToString:instanceURL.host];
 }
 
 @end
